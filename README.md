@@ -1,6 +1,37 @@
-# Laguinho
-
+## Laguinho
+  
 Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/)
 
+## Configuração de Instalação
 
-OBS: Esse ainda é um projeto em discussão, para acompanhar melhor, tudo começou com [esta issue no laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/issues/31), a partir dela você consegue chegar em toda a discussão sobre a CLI
+Obs: É necessário ter o python 3 instalado 
+
+### Configurando a máquina
+
+Para que o projeto funcione na sua máquina, é necessário ter instalado o pip
+
+``` bash
+# instalando o pipenv
+$ pip install --user pipenv
+```
+
+### Configurando o projeto
+
+``` bash
+# clonando o repositório
+$ git clone https://github.com/OpenDevUFCG/laguinho.git
+$ cd laguinho
+
+#  instalando as dependências
+$  pipenv install
+
+# iniciando a virtualenv gerada
+$ pipenv shell
+
+# saindo da virtualenv
+$ deactivate
+```
+
+## Como Contribuir
+
+Quer implementar alguma nova funcionalidade ou corrigir algum bug? leia o CONTRIBUTING.md e saiba por onde começar! 
