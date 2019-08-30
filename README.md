@@ -1,4 +1,4 @@
-## Laguinho
+# Laguinho
   
 Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/)
 
@@ -7,8 +7,6 @@ Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho
 Obs: É necessário ter o python 3 instalado 
 
 ### Configurando a máquina
-
-Para que o projeto funcione na sua máquina, é necessário ter instalado o pip
 
 ``` bash
 # instalando o pipenv
