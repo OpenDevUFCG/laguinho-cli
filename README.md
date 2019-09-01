@@ -1,4 +1,4 @@
-## Laguinho
+## Laguinho [![chat on Discord](https://img.shields.io/discord/558293573494112257.svg?logo=discord)](https://discordapp.com/invite/vFFGGEE)
   
 Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/)
 
@@ -22,16 +22,14 @@ $ pip install --user pipenv
 $ git clone https://github.com/OpenDevUFCG/laguinho.git
 $ cd laguinho
 
-#  instalando as dependências
-$  pipenv install
-
-# iniciando a virtualenv gerada
-$ pipenv shell
-
-# saindo da virtualenv
-$ deactivate
+# instalando as dependências
+$ pipenv install
 ```
 
 ## Como Contribuir
 
-Quer implementar alguma nova funcionalidade ou corrigir algum bug? Leia o CONTRIBUTING.md e saiba por onde começar! 
+Quer implementar alguma nova funcionalidade ou corrigir algum bug? Pode ir dando uma olhada nas issues abertas pra saber no que estamos trabalhando ou se preferir pode abrir sua própria caso queira corrigir ou adicionar algo novo! 
+
+Qualquer dúvida é só procurar a gente via [discord](https://discord.gg/vMcuNtt) ou pelas issues mesmo!  
+
+OBS: Esse ainda é um projeto em desenvolvimento, para acompanhar melhor, tudo começou com [esta issue no laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/issues/31), a partir dela você consegue chegar em toda a discussão sobre a CLI
