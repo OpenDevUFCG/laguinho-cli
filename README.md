@@ -2,7 +2,7 @@
   
 Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/)
 
-## Configuração de Instalação
+## Desenvolvimento
 
 Obs: É necessário ter o python 3 instalado 
 
