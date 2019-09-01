@@ -32,4 +32,4 @@ $ deactivate
 
 ## Como Contribuir
 
-Quer implementar alguma nova funcionalidade ou corrigir algum bug? leia o CONTRIBUTING.md e saiba por onde começar! 
+Quer implementar alguma nova funcionalidade ou corrigir algum bug? Leia o CONTRIBUTING.md e saiba por onde começar! 
