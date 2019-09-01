@@ -4,7 +4,7 @@ Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho
 
 ## Desenvolvimento
 
-Obs: É necessário ter o python 3 instalado 
+Este projeto é feito utilizando [Python 3](https://www.python.org/), você precisa tê-lo [instalado](https://www.python.org/downloads/) na sua máquina.
 
 ### Configurando a máquina
 
