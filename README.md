@@ -4,11 +4,9 @@ Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho
 
 ## Desenvolvimento
 
-Este projeto é feito utilizando [Python 3](https://www.python.org/), você precisa tê-lo [instalado](https://www.python.org/downloads/) na sua máquina. 
+Este projeto é feito utilizando [Python 3](https://www.python.org/), você precisa tê-lo [instalado](https://www.python.org/downloads/) na sua máquina.
 
 ### Configurando a máquina
-
-Para que o projeto funcione na sua máquina, é necessário ter instalado o pip
 
 ``` bash
 # instalando o pipenv
