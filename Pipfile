@@ -12,4 +12,4 @@ click = "*"
 python_version = "3"
 
 [scripts]
-start="pipenv run python3 laguinho"
+laguinho-dev="python3 run.py"
