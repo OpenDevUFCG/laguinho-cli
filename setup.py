@@ -11,6 +11,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        laguinho=laguinho.cli:cli
+        laguinho=laguinho:cli
     '''
 )
