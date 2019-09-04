@@ -10,3 +10,6 @@ click = "*"
 
 [requires]
 python_version = "3"
+
+[scripts]
+laguinho-dev="python3 run.py"
