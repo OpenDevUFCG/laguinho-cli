@@ -1,5 +1,5 @@
 import click
-from laguinho.commands.get import get
+from .commands.get import get
 
 @click.group()
 def cli():
