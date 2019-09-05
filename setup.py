@@ -12,5 +12,6 @@ setup(
     entry_points='''
         [console_scripts]
         laguinho=laguinho:cli
-    '''
+    ''',
+    python_requires='>=3',
 )
