@@ -1,7 +1,7 @@
 #### Issue Relacionada
 <!-- Substitua NUMERO_DA_ISSUE com sua issue -->
 
-#NUMERO_DA_ISSUE
+Resolve #NUMERO_DA_ISSUE
 
 #### Qual o propósito dessa pull request?
 
