@@ -1,0 +1,11 @@
+{
+  "name": "roadmap-cc",
+  "url": "https://github.com/OpenDevUFCG/roadmap-cc",
+  "path": "/data",
+  "data_format": "csv",
+  "contributable": true,
+  "maintainers": [
+    "Juan Barros",
+    "Fanny"
+  ]
+}
