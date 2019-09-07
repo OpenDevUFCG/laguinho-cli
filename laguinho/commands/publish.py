@@ -1,5 +1,6 @@
 import click
 import json
+import os
 
 @click.command('publish')
 def publish():
@@ -8,21 +9,33 @@ def publish():
 
 
 def create_form():
-    metadats = {}
 
-    metadats['name'] = click.prompt('\nNome do dataset', type=str, default="default")
-    metadats['url'] = click.prompt('Url do diretório', type=str)
-    metadats['path'] = click.prompt("Caminho da raiz até o diretório onde está o dataset", type=str, default="./")
+    dir_path  = os.getcwd()
+    folder_name = os.path.basename(dir_path)
+
+    if os.path.exists(dir_path + "/laguinho.json"):
+             click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?", abort=True)
+                
+    metadata = {}
+
+    metadata['name'] = click.prompt('\nNome do dataset', type=str, default=folder_name)
+    metadata['url'] = click.prompt('URL do repositório do Github', type=str)
+    metadata['data_format'] = click.prompt("Formato dos arquivos", type=str, default="csv")
+    
+    data_path = '/' + metadata['name'] + '.' + metadata['data_format']
+    metadata['path'] = click.prompt("Caminho dentro do repositório onde está localizado o dataset", type=str, default= data_path)
+
     maintainers = click.prompt("Mantenedores (separados por virgula)", type=str, default="", show_default=False)
-    metadats['data_format'] = click.prompt("Formato do arquivo", type=str, default="csv")
-    metadats['contributable'] = click.prompt("Os dados são contribuíveis?" , type=bool, default=True)
-   
-    metadats['maintainers'] = [maintainer.strip() for maintainer in maintainers.split(',') if len(maintainer) > 0]
+    metadata['maintainers'] = [maintainer.strip() for maintainer in maintainers.split(',') if len(maintainer) > 0]
 
-    click.echo("\n" + json.dumps(metadats, indent=2))
+    metadata['contributable'] = click.confirm("Os dados são contribuíveis?")
+   
+    click.echo('\nArquivo laguinho.json:\n')
+
+    click.echo( json.dumps(metadata, indent=2))
 
     if(click.confirm('\n\nOs dados estão corretos?')):
-        write_laguinho_json(metadats)
+        write_laguinho_json(metadata)
         click.echo('Arquivo criado com sucesso!') 
 
     else:
