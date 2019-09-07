@@ -4,17 +4,17 @@ import os
 
 @click.command('publish')
 def publish():
-    create_form()
+    init_laguinho()
 
 
 
-def create_form():
+def init_laguinho():
 
     dir_path  = os.getcwd()
     folder_name = os.path.basename(dir_path)
 
     if os.path.exists(dir_path + "/laguinho.json"):
-             click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?", abort=True)
+        click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?", abort=True)
                 
     metadata = {}
 
