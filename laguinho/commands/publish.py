@@ -2,11 +2,12 @@ import click
 import json
 import os
 
-@click.command('publish')
+@click.command('publish', short_help='Publica dataset no laguinho.')
 def publish():
+    """Publica um dataset no laguinho para que possa ser baixado por outras pessoas por meio do comando get."""
+    click.echo('Iniciando publish no laguinho.')
     init_laguinho()
-
-
+    click.echo('Feature em desenvolvimento, o dataset ainda não será publicado.')
 
 def init_laguinho():
 
@@ -46,4 +47,3 @@ def write_laguinho_json(data):
     file_path = './laguinho.json' 
     with open(file_path, 'w') as fp:
         json.dump(data, fp, indent=2)
-
