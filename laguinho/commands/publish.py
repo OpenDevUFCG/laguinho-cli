@@ -4,8 +4,10 @@ import os
 
 @click.command('publish', short_help='Publica dataset no laguinho.')
 def publish():
-    """Publica dataset de um repositório do github no laguinho que estará disponível para ser acessado."""
-    click.echo('Feature em desenvolvimento...')
+    """Publica um dataset no laguinho para que possa ser baixado por outras pessoas por meio do comando get."""
+    click.echo('Iniciando publish no laguinho.')
+    init_laguinho()
+    click.echo('Feature em desenvolvimento, o dataset ainda não será publicado.')
 
 def init_laguinho():
 
