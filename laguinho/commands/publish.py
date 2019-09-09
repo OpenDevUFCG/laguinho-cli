@@ -1,13 +1,18 @@
 import click
 import json
 import os
+import requests
+
+API_URL = "http://localhost:8080"
+
+API_ENDPOINT = API_URL + "/datasets"
 
 @click.command('publish', short_help='Publica dataset no laguinho.')
 def publish():
     """Publica um dataset no laguinho para que possa ser baixado por outras pessoas por meio do comando get."""
     click.echo('Iniciando publish no laguinho.')
     init_laguinho()
-    click.echo('Feature em desenvolvimento, o dataset ainda não será publicado.')
+    post_dataset()
 
 def init_laguinho():
 
@@ -21,9 +26,9 @@ def init_laguinho():
 
     metadata['name'] = click.prompt('\nNome do dataset', type=str, default=folder_name)
     metadata['url'] = click.prompt('URL do repositório do Github', type=str)
-    metadata['data_format'] = click.prompt("Formato dos arquivos", type=str, default="csv")
+    metadata['format'] = click.prompt("Formato dos arquivos", type=str, default="csv")
     
-    data_path = '/' + metadata['name'] + '.' + metadata['data_format']
+    data_path = '/' + metadata['name'] + '.' + metadata['format']
     metadata['path'] = click.prompt("Caminho dentro do repositório onde está localizado o dataset", type=str, default= data_path)
 
     maintainers = click.prompt("Mantenedores (separados por virgula)", type=str, default="", show_default=False)
@@ -42,6 +47,18 @@ def init_laguinho():
     else:
         click.echo('Operação cancelada.')
 
+def post_dataset():
+    data = read_laguinho_json()
+    response = requests.post(url=API_ENDPOINT, json=data)
+    if (response.ok):
+        click.echo('Sucesso ao publicar o dataset no laguinho!')
+    else:
+        click.echo('Falha ao publicar o dataset no laguinho')
+
+def read_laguinho_json():
+    file_path = './laguinho.json' 
+    with open(file_path, 'r') as fp:
+        return json.load(fp)
 
 def write_laguinho_json(data):
     file_path = './laguinho.json' 
