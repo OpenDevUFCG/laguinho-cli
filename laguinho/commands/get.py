@@ -12,18 +12,20 @@ def get(name):
     """Retorna os dados disponiveis de um determinado repositório do github."""
     click.echo('Recuperando dados de %s' % name)
     download_dataset({"url":"https://github.com/ArthurFerrao/bot-casper","path":"/backend/src", "name":"teste"})
+    # download_dataset({"url":"https://github.com/lucasaarcoverde/face_recognizer","path":"/data", "name":"gitcli"})    
 
 
 # Refatorar -> caso a url n venha com o http pode dar ruim
 # Retorna a url do repositorio na api do github
 def create_github_api_url(metadata):
     url_params = metadata['url'].split('/')
-    username =  url_params[3] 
-    repo =  url_params[4]
+    server_idx = url_params.index('github.com')
+    username = url_params[server_idx + 1]
+    repo = url_params[server_idx + 2]
+
     data_path = metadata['path']
     github_api = "https://api.github.com/repos/{}/{}/contents{}".format(username, repo, data_path)
     return github_api
-
 
 # Funcao principal que chama o createDir, alem de criar a pasta onde ficaram os arquivos baixados
 def download_dataset(metadata):
@@ -58,7 +60,7 @@ def createDir(github_url, dir_path):
 ## IMPORTANTE -> o download_url ta retornando bits, precisa converter pra string 
 def createFile(content, path):
     download_url = content["download_url"]
-    print(content['name'])
+    print("criando arquivo", content['name'])
     response = requests.get(download_url)
     file = open(path + "/" + content['name'], 'w')
     file.write(response.text)
