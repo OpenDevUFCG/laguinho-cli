@@ -11,6 +11,7 @@ import requests
 def get(name):
     """Retorna os dados disponiveis de um determinado repositório do github."""
     click.echo('Recuperando dados de %s' % name)
+    download_dataset({"url":"https://github.com/ArthurFerrao/bot-casper","path":"/backend/src", "name":"teste"})
 
 
 # Refatorar -> caso a url n venha com o http pode dar ruim
@@ -29,7 +30,7 @@ def download_dataset(metadata):
     path = metadata['path']
     current_path = os.getcwd()
     git_url = create_github_api_url(metadata)
-    dir_path = current_path + path + metadata['name']
+    dir_path = current_path +"/" + metadata['name']
     os.mkdir(dir_path)
     createDir(git_url, dir_path)
 
@@ -40,16 +41,16 @@ def createDir(github_url, dir_path):
     response = requests.get(github_url)
     contents = json.loads(response.content)
 
-    if  "type" not in contents :
+    if  isinstance(contents, list) :
         # o contents é um diretorio
         for content in contents:    
             if content['type'] == 'dir':
-                dir_path = dir_path + '/' + content['name']
-                os.mkdir(dir_path)
-
-            new_github_url = github_url + "/" + content['name']
-            createDir(new_github_url, dir_path)
-
+                new_dir_path = dir_path + '/' + content['name']
+                os.mkdir(new_dir_path)
+                new_github_url = github_url + "/" + content['name']
+                createDir(new_github_url, new_dir_path)
+            else:
+                createFile(content, dir_path)
     else:
         createFile(contents, dir_path)
 
@@ -57,6 +58,7 @@ def createDir(github_url, dir_path):
 ## IMPORTANTE -> o download_url ta retornando bits, precisa converter pra string 
 def createFile(content, path):
     download_url = content["download_url"]
+    print(content['name'])
     response = requests.get(download_url)
     file = open(path + "/" + content['name'], 'w')
-    file.write(str(response.content)).close()
+    file.write(response.text)
