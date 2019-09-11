@@ -1,7 +1,8 @@
 import click
+import requests
 import json
 import os
-import requests
+import base64
 
 
 @click.command('get', short_help="Retorna dados do repositório.")
@@ -11,10 +12,6 @@ def get(name):
     click.echo('Recuperando dados de %s' % name) 
     metadata = { "url": "https://github.com/OpenDevUFCG/laguinho", "path": "/laguinho", "name": "laguinho"}
     download_dataset(metadata)
-
-
-def request_github_api(url):
-    return requests.get(url)
 
 
 def create_github_api_url(metadata):
@@ -62,9 +59,11 @@ def create_dir(github_url, dir_path):
 
  
 def create_file(content, path):
-    download_url = content["download_url"]
     print("criando arquivo", content['name'])
+    response = request_github_api(content['git_url'] )
+    decoded_content = base64.b64decode(response.content)
+    file = open(path + "/" + content['name'], 'wb')
+    file.write(decoded_content)
 
-    response = request_github_api(download_url)
-    file = open(path + "/" + content['name'], 'w')
-    file.write(response.text)
+def request_github_api(url):
+    return requests.get(url)
