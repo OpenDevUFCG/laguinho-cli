@@ -1,74 +1,162 @@
-import click
-import requests
 import json
 import os
-import base64
+import click
+import requests
 
 
 @click.command('get', short_help="Retorna dados do repositório.")
-@click.argument('name', required=True, type=str)
+@click.argument('name', required=True, type=str)    
 def get(name):
     """Retorna os dados disponiveis de um determinado repositório do github."""
-    click.echo('Recuperando dados de %s' % name) 
-    metadata = { "url": "https://github.com/OpenDevUFCG/laguinho", "path": "/laguinho/commands/get.py", "name": "laguinho"}
-    download_dataset(metadata)
+    click.echo('Recuperando dados de %s' % name)
+    metadata = {"url": "https://github.com/opendevufcg/laguinho", "path": "/laguinho", "name": "dados"}
+    try:
+        download_dataset(metadata)
+        click.echo("\nArquivo(s) baixado(s) com sucesso!\n")
+    except:
+        click.echo('\nVocê alcançou sua cota máxima de downloads disponíveis pelo Github. Caso queira aumenta-la, acesse nosso github e leia a sessão limite de donwloads no README!.\n')
 
 
-def create_github_url(metadata, download_url):
+def download_dataset(metadata):
+    """Baixa os arquivos do github
+
+
+    Baixa os arquivos através da API do Github.
+
+    Args:
+            metadata: JSON com informações acerca do dataset.
+    """
+    current_path = os.getcwd()
+    dir_path = "{}/{}".format(current_path, metadata['name'])
+
+    if not os.path.isdir(dir_path):
+        mkdir_and_cd(dir_path)
+        check_dataset(metadata)
+
+    else:
+        click.echo("Diretório '{}' já existe!".format(metadata['name']))
+        metadata['name'] = click.prompt('Qual o nome do novo diretório?')
+        download_dataset(metadata)
+
+def check_dataset(metadata):
+    """ Checa o dataset
+
+
+    Verifica se o elemento específicado no atributo path é um diretório ou um
+    arquivo. Caso seja um diretório, é chamada a função create, caso contrário,
+    o arquivo é criado.
+
+    Args:
+            metadata: JSON com informações acerca do dataset.
+    """
+    github_url = create_github_url(metadata)
+    contents = request_github_api(github_url)
+    if  isinstance(contents, list):
+        create(contents, github_url)
+    else:
+        name = metadata['path'].split('/').pop()
+        donwload_url = create_github_url(metadata, True)
+        create_file(donwload_url, name)
+
+def create(contents, github_url):
+    """ Cria os elementos do dataset
+
+
+   Recebe um ou mais elementos. Caso o elemento
+   seja um diretório, é chamada a função para criação
+   de diretórios, caso contrário, é chamada a de criação
+   de arquivo.
+
+    Args:
+            contents: Elementos a ser analisado.
+            github_url: URL  base do github usada na criação
+            dos repositórios.
+
+    """
+    for content in contents:
+        if content['type'] == 'dir':
+            create_dir(github_url, content)
+        else:
+            create_file(content['download_url'], content['name'])
+
+def create_dir(github_url, content):
+    """Cria um diretório
+
+    Cria um diretório do dataset utilizando as biblioteca
+    'so'. Após a criação, é chamada a função 'create' passando
+    os elementos dentro do respectivo diretório criado.
+
+    Args:
+            github_url: URL  base do github usada na criação
+            dos repositórios.
+
+            content: Elemento retornado pela API do github
+            referente ao diretório a ser criado.
+
+    """
+    click.echo("Criando diretório {}".format(content['name']))
+    dir_path = "{}/{}".format(os.getcwd(), content['name'])
+    mkdir_and_cd(dir_path)
+    new_github_url = "{}/{}".format(github_url, content['name'])
+    contents = request_github_api(new_github_url)
+    create(contents, new_github_url)
+
+def create_file(donwload_url, name):
+    """Cria um arquivo específico
+
+
+    Baixa e cria um novo arquivo do dataset.
+
+    Args:
+            download_url: URL da API para o download do arquivo.
+            name: Nome do arquivo.
+    """
+    click.echo("Criando arquivo {}".format(name))
+    content = request_github_api(donwload_url, True)
+    with open("{}/{}".format(os.getcwd(), name), 'wb') as file:
+        file.write(content)
+
+
+def create_github_url(metadata, is_file=False):
+    """Contrói a URL da API
+
+
+    Constrói a URL base da API do github a partir
+    dos dados presentes no metadata.
+
+    Args:
+            metadata: JSON com informações acerca do dataset.
+            is_file: FLAG usada pra sinalizar se o dataset é apenas um elemento.
+    """
     url_params = metadata['url'].split('/')
     server_idx = url_params.index('github.com')
     username = url_params[server_idx + 1]
     repo = url_params[server_idx + 2]
-
     data_path = metadata['path']
-    url = "https://api.github.com/repos/{}/{}/contents{}".format(username, repo, data_path)
-    if(download_url):
-        url = "https://raw.githubusercontent.com/{}/{}/master{}".format(username, repo, data_path)
-    return url
+
+    return ("https://raw.githubusercontent.com/{}/{}/master{}" if is_file else "https://api.github.com/repos/{}/{}/contents{}").format(username, repo, data_path)
+
+def request_github_api(url, request_file=False):
+    """Faz uma requisição a API do Github
 
 
-def download_dataset(metadata):
-    current_path = os.getcwd()
-    dir_path = current_path +"/" + metadata['name']
+    Faz uma requisição a API do Github. Caso a FLAG
+    is_file  não seja True, os dados retornados serão
+    uma lista e devem ser convertidos para JSON.
 
-    if not os.path.isdir(dir_path):
-        os.mkdir(dir_path)
-        create(metadata, dir_path)
-        
-    else:
-        print("Diretório '{}' já existe!".format(metadata['name']))
-        metadata['name'] = click.prompt('Qual o nome do novo diretório?')
-        download_dataset(metadata)
+    Args:
+            url: URL do Github a ser requisitada.
+            request_file: FLAG responsável por sinalizar
+            se o retorno é um elemento ou uma lista de
+            elementos .
+    """
+    response = requests.get(url)
+    contents = response.content
+    if not request_file:
+        contents = json.loads(contents)
+    return contents
 
-def create(metadata, dir_path):
-    url = create_github_url(metadata, False)
-    response = request_github_api(url)
-    contents = json.loads(response.content)
-    if  isinstance(contents, list) :
-        create_dir(url, dir_path)
-    else:
-        name = metadata['path'].split('/').pop()
-        url = create_github_url(metadata, True)
-        create_file(url, name, dir_path)
-
-def create_dir(github_url, dir_path):
-    response = request_github_api(github_url)
-    contents = json.loads(response.content)
-
-    for content in contents:    
-        if content['type'] == 'dir':
-            new_dir_path = dir_path + '/' + content['name']
-            os.mkdir(new_dir_path)
-            new_github_url = github_url + "/" + content['name']
-            create_dir(new_github_url, new_dir_path)
-        else:
-            create_file(content['download_url'], content['name'], dir_path)
-
- 
-def create_file(url, name, path):
-    response = request_github_api(url)
-    file = open(path + "/" + name, 'wb')
-    file.write(response.content)
-
-def request_github_api(url):
-    return requests.get(url)
+def mkdir_and_cd(dir_path):
+    """Cria e entra em um determinado diretório"""
+    os.mkdir(dir_path)
+    os.chdir(dir_path)
