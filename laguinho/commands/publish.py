@@ -2,8 +2,7 @@ import click
 import json
 import os
 import requests
-
-API_URL = "http://localhost:8080"
+from ..values import API_URL
 
 API_ENDPOINT = API_URL + "/datasets"
 
@@ -20,7 +19,8 @@ def init_laguinho():
     folder_name = os.path.basename(dir_path)
 
     if os.path.exists(dir_path + "/laguinho.json"):
-        click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?", abort=True)
+        click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?")
+        return
                 
     metadata = {}
 
