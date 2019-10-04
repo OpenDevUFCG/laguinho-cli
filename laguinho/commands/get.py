@@ -14,7 +14,7 @@ def get(name):
         download_dataset(metadata)
         click.echo("\nArquivo(s) baixado(s) com sucesso!\n")
     except:
-        click.echo('\nVocê alcançou sua cota máxima de downloads disponíveis pelo Github. Caso queira aumenta-la, acesse nosso github e leia a sessão limite de donwloads no README!.\n')
+        click.echo('\nVocê alcançou sua cota máxima de downloads disponíveis pelo Github.\n')
 
 
 def download_dataset(metadata):
@@ -50,7 +50,8 @@ def check_dataset(metadata):
             metadata: JSON com informações acerca do dataset.
     """
     github_url = create_github_url(metadata)
-    contents = request_github_api(github_url)
+    response = request_github_api(github_url)
+    contents = json.loads(response)
     if  isinstance(contents, list):
         create(contents, github_url)
     else:
@@ -98,7 +99,8 @@ def create_dir(github_url, content):
     dir_path = "{}/{}".format(os.getcwd(), content['name'])
     mkdir_and_cd(dir_path)
     new_github_url = "{}/{}".format(github_url, content['name'])
-    contents = request_github_api(new_github_url)
+    response = request_github_api(new_github_url)
+    contents = json.loads(response)
     create(contents, new_github_url)
 
 def create_file(donwload_url, name):
@@ -112,13 +114,13 @@ def create_file(donwload_url, name):
             name: Nome do arquivo.
     """
     click.echo("Criando arquivo {}".format(name))
-    content = request_github_api(donwload_url, True)
+    content = request_github_api(donwload_url)
     with open("{}/{}".format(os.getcwd(), name), 'wb') as file:
         file.write(content)
 
 
 def create_github_url(metadata, is_file=False):
-    """Contrói a URL da API
+    """Constrói a URL da API
 
 
     Constrói a URL base da API do github a partir
@@ -136,25 +138,17 @@ def create_github_url(metadata, is_file=False):
 
     return ("https://raw.githubusercontent.com/{}/{}/master{}" if is_file else "https://api.github.com/repos/{}/{}/contents{}").format(username, repo, data_path)
 
-def request_github_api(url, request_file=False):
+def request_github_api(url):
     """Faz uma requisição a API do Github
 
 
-    Faz uma requisição a API do Github. Caso a FLAG
-    is_file  não seja True, os dados retornados serão
-    uma lista e devem ser convertidos para JSON.
+    Faz uma requisição a API do Github.
 
     Args:
             url: URL do Github a ser requisitada.
-            request_file: FLAG responsável por sinalizar
-            se o retorno é um elemento ou uma lista de
-            elementos .
     """
     response = requests.get(url)
-    contents = response.content
-    if not request_file:
-        contents = json.loads(contents)
-    return contents
+    return response.content
 
 def mkdir_and_cd(dir_path):
     """Cria e entra em um determinado diretório"""
