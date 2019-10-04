@@ -22,6 +22,9 @@ $ cd laguinho
 
 # instalando as dependências
 $ pipenv install
+
+# executando o script de inicialização da versão de desenvolvimento 
+$ pipenv run laguinho-dev [COMANDO]
 ```
 
 ## Como Contribuir
