@@ -3,8 +3,8 @@ import os
 import click
 import requests
 
-from ..utils.github_api import validate_github_url
-from ..utils.validation import validate_input, validate_path
+from ..utils.github_api import verify_github_url
+from ..utils.validations import validate_input, validate_path
 from ..values import API_URL
 
 API_ENDPOINT = API_URL + "/datasets"
@@ -71,7 +71,7 @@ def recv_repo_url():
 
     while not valid_url:
         repo_url = click.prompt('URL do repositório do Github', type=str)
-        valid_url = validate_github_url(repo_url)
+        valid_url = verify_github_url(repo_url)
         message = 'URL inválida! Por favor, insira uma URL existente.' if not valid_url else 'URL válida!'
         click.echo(message)
 

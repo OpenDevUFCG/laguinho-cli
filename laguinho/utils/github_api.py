@@ -33,10 +33,10 @@ def request_github_api(url):
     response = requests.get(url)
     return response.content
 
-def validate_github_url(url):
+def verify_github_url(url):
     """Verifica se uma url do Github é válida.
 
-    Valida se uma url do github é válida, ou seja,
+    Verifica se uma url do github é válida, ou seja,
     se existe um repositório referente a essa url fazendo
     uma requisição a mesma.
 
