@@ -1,7 +1,6 @@
 import json
 import os
 import click
-import requests
 from ..utils.github_api import create_github_url, request_github_api
 
 

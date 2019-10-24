@@ -3,8 +3,7 @@ import os
 import click
 import requests
 
-from ..utils.github_api import verify_github_url
-from ..utils.validations import validate_input, validate_path
+from ..utils.validations import validate_input, validate_path, validate_github_url
 from ..values import API_URL
 
 API_ENDPOINT = API_URL + "/datasets"
@@ -33,10 +32,11 @@ def init_laguinho():
 
     metadata = {}
 
-    metadata['name'] = validate_input(label='\nNome do dataset', type_value=str, default_value=folder_name)
-    metadata['url'] = recv_repo_url()
+    metadata['name'] = handle_input(label='\nNome do dataset', type_value=str, default_value=folder_name)
 
-    metadata['format'] = validate_input(label="formato dos arquivos", type_value=str, default_value="csv")
+    metadata['url'] = handle_repo_url()
+
+    metadata['format'] = handle_input(label="formato dos arquivos", type_value=str, default_value="csv")
 
     default_path = '/' + metadata['name'] + '.' + metadata['format']
     data_path = click.prompt("Caminho dentro do repositório onde está localizado o dataset", type=str, default=default_path)
@@ -59,7 +59,32 @@ def init_laguinho():
         click.echo('Operação cancelada.')
 
 
-def recv_repo_url():
+def handle_input(label, type_value, default_value, show_default=True):
+    """Recebe o input do usuário
+
+    A função recebe os parametros para o prompt e, ao receber o input,
+    checa se o mesmo é válido, caso seja, retorna o valor.strip(), caso contrário,
+    retorna o valor default.
+
+    Args:
+        label: Texto a ser visualizado no input.
+        type_default: Tipo do input.
+        default_value: Valor default caso não seja fornecido qualquer valor ou tenha
+    sido fornecido um valor inválido.
+        show_default: Flag que diz se o default_value deve ser mostrado.
+    """
+    value = click.prompt(label, type=type_value, default=default_value, show_default=show_default).strip()
+
+    valid_value = validate_input(value)
+
+    while not valid_value:
+        click.echo('Valor inválido!\n')
+        value = click.prompt(label, type=type_value, default=default_value, show_default=show_default).strip()
+        valid_value = validate_input(value)
+
+    return value if value != "" else default_value
+
+def handle_repo_url():
     """Recebe a URL do repositório do Github
 
     A função recebe a URL do repositório do Github contendo
@@ -71,7 +96,7 @@ def recv_repo_url():
 
     while not valid_url:
         repo_url = click.prompt('URL do repositório do Github', type=str)
-        valid_url = verify_github_url(repo_url)
+        valid_url = validate_github_url(repo_url)
         message = 'URL inválida! Por favor, insira uma URL existente.' if not valid_url else 'URL válida!'
         click.echo(message)
 
@@ -102,8 +127,8 @@ def post_dataset():
 def read_laguinho_json():
     """Retorna o conteúdo do arquivo laguinho.json"""
     file_path = './laguinho.json'
-    with open(file_path, 'r') as fp:
-        return json.load(fp)
+    with open(file_path, 'r') as file:
+        return json.load(file)
 
 def write_laguinho_json(data):
     """Escreve os dados recebidos no laguinho.json
@@ -116,5 +141,5 @@ def write_laguinho_json(data):
     arquivo 'laguinho.json'
     """
     file_path = './laguinho.json'
-    with open(file_path, 'w') as fp:
-        json.dump(data, fp, indent=2)
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=2)
