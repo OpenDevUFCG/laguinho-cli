@@ -1,7 +1,7 @@
 import json
 import os
 import click
-import requests
+from ..utils.github_api import create_github_url, request_github_api
 
 
 @click.command('get', short_help="Retorna dados do repositório.")
@@ -117,38 +117,6 @@ def create_file(donwload_url, name):
     content = request_github_api(donwload_url)
     with open("{}/{}".format(os.getcwd(), name), 'wb') as file:
         file.write(content)
-
-
-def create_github_url(metadata, is_file=False):
-    """Constrói a URL da API
-
-
-    Constrói a URL base da API do github a partir
-    dos dados presentes no metadata.
-
-    Args:
-            metadata: JSON com informações acerca do dataset.
-            is_file: FLAG usada pra sinalizar se o dataset é apenas um elemento.
-    """
-    url_params = metadata['url'].split('/')
-    server_idx = url_params.index('github.com')
-    username = url_params[server_idx + 1]
-    repo = url_params[server_idx + 2]
-    data_path = metadata['path']
-
-    return ("https://raw.githubusercontent.com/{}/{}/master{}" if is_file else "https://api.github.com/repos/{}/{}/contents{}").format(username, repo, data_path)
-
-def request_github_api(url):
-    """Faz uma requisição a API do Github
-
-
-    Faz uma requisição a API do Github.
-
-    Args:
-            url: URL do Github a ser requisitada.
-    """
-    response = requests.get(url)
-    return response.content
 
 def mkdir_and_cd(dir_path):
     """Cria e entra em um determinado diretório"""
