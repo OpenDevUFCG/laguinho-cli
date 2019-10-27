@@ -54,6 +54,5 @@ def validate_github_url(url):
 
     github_url = create_github_url({'url': url, 'path': '/'})
     response = requests.get(url=github_url)
-    contents = json.loads(response.content)
-
-    return isinstance(contents, list)
+    
+    return response.status_code == 200
