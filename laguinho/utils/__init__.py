@@ -18,7 +18,7 @@ def load_token():
             token = json.load(file)['GITHUB_TOKEN']
 
     else:
-        click.echo('Para baixar os dados do github, é necessário possuir um TOKEN de permissão do Github, caso você não saiba como gerar, siga as instruções desse link.')
+        click.echo('Para baixar os dados do github, é necessário possuir um TOKEN de permissão do Github, caso você não saiba como gerar, siga as instruções descritas no README.')
         token = click.prompt("Por favor, insira um TOKEN do Github válido").strip()
         file_content = {'GITHUB_TOKEN': token}
         with open(config_path, 'w')  as file:

@@ -9,6 +9,10 @@ def configure(token):
     config_path = os.path.expanduser('~') + '/laguinho.config'
     file_content = {'GITHUB_TOKEN':token}
 
+    if os.path.exists(config_path):
+        click.confirm("\nJá existe um token configurado. Deseja sobrescrever?")
+        return
+
     with open(config_path, 'w')  as file:
         json.dump(file_content, file, indent=2)
 
