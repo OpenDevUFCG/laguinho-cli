@@ -45,11 +45,12 @@ def validate_github_url(url):
     Args:
             url: URL de um repositório do Github.
     """
-    if 'github.com' not in url:
+    if 'github.com/' not in url:
         return False
 
-    #  Checa se possui o 'github.com', username e repositorio.
-    if len(url.split('/')) < 3:
+    #  Checa se possui o username (ou organizacão) e repositorio na url.
+    url_params = url.split('github.com/')[1]
+    if len(url_params.split('/')) < 2:
         return False
 
     github_url = create_github_url({'url': url, 'path': '/'})
