@@ -8,7 +8,7 @@ from ..utils.github_api import create_github_url, request_github_api
 @click.argument('name', required=True, type=str)
 def get(name):
     """Retorna os dados disponiveis de um determinado repositório do github."""
-    click.echo('Recuperando dados de %s' % name)
+    click.echo('\nRecuperando dados de %s' % name)
     metadata = {"url": "https://github.com/opendevufcg/laguinho", "path": "/laguinho", "name": "dados"}
     try:
         download_dataset(metadata)
