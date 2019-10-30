@@ -2,19 +2,25 @@ import json
 import os
 import click
 from ..utils.github_api import create_github_url, request_github_api
-
+from ..services.datasets import get_dataset
 
 @click.command('get', short_help="Retorna dados do repositório.")
 @click.argument('name', required=True, type=str)
 def get(name):
     """Retorna os dados disponiveis de um determinado repositório do github."""
     click.echo('Recuperando dados de %s' % name)
-    metadata = {"url": "https://github.com/opendevufcg/laguinho", "path": "/laguinho", "name": "dados"}
-    try:
-        download_dataset(metadata)
-        click.echo("\nArquivo(s) baixado(s) com sucesso!\n")
-    except:
-        click.echo('\nVocê alcançou sua cota máxima de downloads disponíveis pelo Github.\n')
+
+    response = get_dataset(name)
+
+    if response.status_code == 200:
+        metadata = json.loads(response.content)
+        try:
+            download_dataset(metadata)
+            click.echo("\nArquivo(s) baixado(s) com sucesso!\n")
+        except:
+            click.echo('\nVocê alcançou sua cota máxima de downloads disponíveis pelo Github.\n')
+    else:
+        click.echo('\nNome não condiz com nenhum dataset cadastrado.\n')
 
 
 def download_dataset(metadata):

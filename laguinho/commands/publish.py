@@ -4,17 +4,18 @@ import click
 import requests
 
 from ..utils.validations import validate_input, validate_path, validate_github_url
-from ..values import API_URL
-
-API_ENDPOINT = API_URL + "/datasets"
+from ..services.datasets import post_dataset
 
 @click.command('publish', short_help='Publica dataset no laguinho.')
 def publish():
     """Publica um dataset no laguinho para que possa ser baixado por outras pessoas por meio do comando get."""
     click.echo('Iniciando publish no laguinho.')
-    init_laguinho()
-    if  laguinho_json_exists():
-        post_dataset()
+
+    if laguinho_json_exists() and not click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?"):
+        publish_dataset()
+    else:
+        init_laguinho()
+        publish_dataset()
 
 def init_laguinho():
     """Cria o arquivo contendo os metadados do dataset
@@ -25,10 +26,6 @@ def init_laguinho():
     """
     dir_path = os.getcwd()
     folder_name = os.path.basename(dir_path)
-
-    if laguinho_json_exists():
-        click.confirm("\nArquivo laguinho.json já existe. Deseja sobrescrever?")
-        return
 
     metadata = {}
 
@@ -111,16 +108,19 @@ def laguinho_json_exists():
     dir_path = os.getcwd()
     return os.path.exists(dir_path + "/laguinho.json")
 
-def post_dataset():
+def publish_dataset():
     """Envia os metadados do dataset a API
 
     A função lê os metadados presentes no arquivo
     laguinho.json e envia os mesmos a API
     """
     data = read_laguinho_json()
-    response = requests.post(url=API_ENDPOINT, json=data)
+    click.echo('Publicando dataset {}'.format(data['name']))
+    response = post_dataset(data)
     if response.ok:
         click.echo('Sucesso ao publicar o dataset no laguinho!')
+    elif response.status_code == 409:
+        click.echo('Nome do dataset já está em uso.')
     else:
         click.echo('Falha ao publicar o dataset no laguinho')
 
