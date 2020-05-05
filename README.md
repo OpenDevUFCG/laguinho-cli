@@ -27,6 +27,22 @@ $ pipenv install
 $ pipenv run laguinho-dev [COMANDO]
 ```
 
+### Gerando um Github Token
+
+![github_token](https://user-images.githubusercontent.com/33502846/67691356-33fda580-f97d-11e9-82c2-315ea2dd7358.gif)
+
+#### Passo a passo
+
+Para baixar os dados pelo comando `get`, é necessário fornecer um token de autenticação do Github, para gerá-lo basta seguir os passos descritos abaixo ou acesse este [link](https://github.com/settings/tokens/new) e pule para o passo 5:
+
+1. Primeiramente, acesse a sua [página de configurações do Github](https://github.com/settings/profile)
+2. Selecione a aba `Developer Settings`
+3. Vá em `Personal Access Token`
+4. Clique em `Generate new Token`
+5. Adicione um nome e selecione a caixa de escolha `user`
+6. Clique em `Generate token`
+7. Copie o token gerado (obs: tenha certeza de ter copiado, uma vez que ele não será disponilizado novamente, apenas ao criar um novo token) e cole na CLI quando requisitado ou executando o comando `configure`.
+
 ## Como Contribuir
 
 Quer implementar alguma nova funcionalidade ou corrigir algum bug? Pode ir dando uma olhada nas issues abertas pra saber no que estamos trabalhando ou se preferir pode abrir sua própria caso queira corrigir ou adicionar algo novo! 

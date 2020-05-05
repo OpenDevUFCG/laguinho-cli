@@ -1,6 +1,7 @@
 import click
 from .commands.get import get
 from .commands.publish import publish
+from .commands.configure import configure
 
 @click.group()
 def cli():
@@ -9,3 +10,4 @@ def cli():
 
 cli.add_command(get)
 cli.add_command(publish)
+cli.add_command(configure)

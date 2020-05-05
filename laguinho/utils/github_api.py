@@ -1,3 +1,4 @@
+import os
 import requests
 
 def create_github_url(metadata, is_file=False):
@@ -23,11 +24,14 @@ def create_github_url(metadata, is_file=False):
 def request_github_api(url):
     """Faz uma requisição a API do Github.
 
-
-    Faz uma requisição a API do Github.
+    A função faz uma requisição a API do
+    github, para isso ela lê a variável de ambiente
+    que possui o oauth token do github e passa
+    como parametro no headers da requisição.
 
     Args:
             url: URL do Github a ser requisitada.
     """
-    response = requests.get(url)
+    token = os.environ.get('GITHUB_TOKEN', '')
+    response = requests.get(url, headers={"Authorization":  "token " + token})
     return response.content
