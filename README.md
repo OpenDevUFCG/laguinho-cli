@@ -1,4 +1,4 @@
-## Laguinho [![chat on Discord](https://img.shields.io/discord/558293573494112257.svg?logo=discord)](https://discordapp.com/invite/vFFGGEE)
+## Laguinho [![chat on Discord](https://img.shields.io/discord/558293573494112257.svg?logo=discord)](https://discord.gg/UgR5WrY)
   
 Interface de linha de comando (CLI) para publicar e recuperar dados no [laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/)
 
