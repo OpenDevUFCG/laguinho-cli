@@ -47,6 +47,6 @@ Para baixar os dados pelo comando `get`, é necessário fornecer um token de aut
 
 Quer implementar alguma nova funcionalidade ou corrigir algum bug? Pode ir dando uma olhada nas issues abertas pra saber no que estamos trabalhando ou se preferir pode abrir sua própria caso queira corrigir ou adicionar algo novo! 
 
-Qualquer dúvida é só procurar a gente via [discord](https://discord.gg/vMcuNtt) ou pelas issues mesmo!  
+Qualquer dúvida é só procurar a gente via [discord](https://discord.gg/UgR5WrY) ou pelas issues mesmo!  
 
 OBS: Esse ainda é um projeto em desenvolvimento, para acompanhar melhor, tudo começou com [esta issue no laguinho-api](https://github.com/OpenDevUFCG/laguinho-api/issues/31), a partir dela você consegue chegar em toda a discussão sobre a CLI
